@@ -1,0 +1,8 @@
+// Strings that contain 1's and 0's.
+String cards[] = { "first card's binary identity", "second card's binary identity" };
+
+// Cardholder names for logs.
+String names[] = { "First Cardholder's Name", "Second Cardholder's Name" };
+
+// 1 if the card is enabled, 0 if not.
+int auth[] = {1, 1};

@@ -15,7 +15,7 @@
 import time
 import RPi.GPIO as GPIO
 
-current_read = ''
+current_read = []
 
 GPIO.setmode(GPIO.BOARD)
 
@@ -26,8 +26,8 @@ GPIO.setup(8, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(10, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(12, GPIO.OUT, initial=GPIO.LOW)
 
-GPIO.add_event_detect(8, GPIO.RISING, callback=lambda: current_read += '1')
-GPIO.add_event_detect(10, GPIO.RISING, callback=lambda: current_read += '0')
+GPIO.add_event_detect(8, GPIO.RISING, callback=lambda: current_read.append('1'))
+GPIO.add_event_detect(10, GPIO.RISING, callback=lambda: current_read.append('0'))
 
 def check(current_read, club_member_cards):
     '''
@@ -39,10 +39,8 @@ def check(current_read, club_member_cards):
     if len(current_read) < 16:
         return None
 
-    scanned_card = current_read[-17:-1]
-    
     for name, card in club_member_cards:
-        if card == scanned_card:
+        if card == scanned_card[-17:-1]:
             # Open the strike for 3 seconds, then close and reset current_read.
             GPIO.output(12, GPIO.HIGH)
             time.sleep(3)
@@ -54,7 +52,8 @@ while True:
     time.sleep(1)
     person_name = check(current_read, all_cards)
     if person_name:
-        current_read = ''
+        # Clear the previous read.
+        del current_read[:]
         # TODO: Logging?
         #log('%s has unlocked the door.' % person_name)
     else:

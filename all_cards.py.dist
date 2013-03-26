@@ -1,0 +1,4 @@
+all_cards = {
+    'Some Person': '1111111111111111',
+    'Another Person': '00000000000000000'
+}

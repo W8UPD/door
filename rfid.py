@@ -29,8 +29,8 @@ GPIO.setmode(GPIO.BOARD)
 input_zeros = 18
 input_ones = 24
 output = 22
-GPIO.setup(input_zeros, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
-GPIO.setup(input_ones, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(input_zeros, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(input_ones, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(output, GPIO.OUT, initial=GPIO.LOW)
 
 def callback_zeros(a):

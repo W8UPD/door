@@ -1,22 +1,13 @@
 #!/usr/bin/env python
 
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 2 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# University of Akron Amateur Radio Club - W8UPD
+# GPLv2+
 # Authors:
 # - Ricky Elrod <ricky@elrod.me>
 
 import time
 import RPi.GPIO as GPIO
+from time import gmtime, strftime
 from all_cards import all_cards
 
 current_read = []
@@ -29,8 +20,8 @@ GPIO.setmode(GPIO.BOARD)
 input_zeros = 18
 input_ones = 24
 output = 22
-GPIO.setup(input_zeros, GPIO.IN, pull_up_down=GPIO.PUD_UP)
-GPIO.setup(input_ones, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setup(input_zeros, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(input_ones, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 GPIO.setup(output, GPIO.OUT, initial=GPIO.LOW)
 
 def callback_zeros(a):
@@ -42,33 +33,39 @@ def callback_ones(a):
 GPIO.add_event_detect(input_zeros, GPIO.FALLING, callback=callback_zeros)
 GPIO.add_event_detect(input_ones, GPIO.FALLING, callback=callback_ones)
 
+def log(severity, message):
+    print '[%s] [%s] %s' % (
+        strftime("%Y-%m-%d %H:%M:%S", gmtime()),
+        severity.upper(),
+        message)
+
 def check(current_read, club_member_cards):
     '''
     Checks if a given current read is a valid card.
     If it is, open the strike, wait for 3s, and close the strike.
-    Then return the person's name.
+    Then return true.
     If not, return false.
     '''
     if len(current_read) < 16:
         return None
 
-    for name, card in club_member_cards.iteritems():
-        if card == ''.join(current_read)[-17:-1]:
-            # Open the strike for 3 seconds, then close and reset current_read.
-            GPIO.output(output, GPIO.HIGH)
-            time.sleep(3)
-            GPIO.output(output, GPIO.LOW)
-            return name
+    print ''.join(current_read)[-17:-1]
+
+    for name, entry in club_member_cards.iteritems():
+        if entry['rfid'] == ''.join(current_read)[-17:-1]:
+            if entry['active']:
+                log('valid', 'Successful entry by %s' % name)
+                # Open the strike for 3 seconds, then close and reset current_read.
+                GPIO.output(output, GPIO.HIGH)
+                time.sleep(3)
+                GPIO.output(output, GPIO.LOW)
+                return name
+            else:
+                log('unauthorized', 'Unauthorized entry by %s' % name)
     return None
 
 while True:
+    del current_read[:]
     time.sleep(1)
-    person_name = check(current_read, all_cards)
-    if person_name:
-        # Clear the previous read
-        del current_read[:]
-        # TODO: Logging?
-        #log('%s has unlocked the door.' % person_name)
-    else:
-        #log('An attempted login occurred at %s.' % date)
-        continue # TODO: Remove this when this else is actually used.
+    if current_read != '':
+        person_name = check(current_read, all_cards)

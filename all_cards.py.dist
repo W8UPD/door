@@ -1,4 +1,8 @@
 all_cards = {
-    'Some Person': '1111111111111111',
-    'Another Person': '00000000000000000'
+    u'Firstname Lastname': {
+       'rfid': '1111111111111111',
+       'active': True
+    }
 }
+
+sql_server = 'mysql://foo:bar@baz.com/the_db'

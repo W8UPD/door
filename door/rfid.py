@@ -7,8 +7,19 @@
 
 import time
 import RPi.GPIO as GPIO
+from datetime import datetime
 from time import gmtime, strftime
-from all_cards import all_cards
+from storm.locals import *
+from all_cards import *
+
+class Entry(object):
+    __storm_table__ = 'entries'
+    id = Int(primary=True)
+    occurred_at = DateTime()
+    name = Unicode()
+
+database = create_database(sql_server)
+store = Store(database)
 
 current_read = []
 
@@ -54,11 +65,23 @@ def check(current_read, club_member_cards):
     for name, entry in club_member_cards.iteritems():
         if entry['rfid'] == ''.join(current_read)[-17:-1]:
             if entry['active']:
-                log('valid', 'Successful entry by %s' % name)
                 # Open the strike for 3 seconds, then close and reset current_read.
                 GPIO.output(output, GPIO.HIGH)
                 time.sleep(3)
                 GPIO.output(output, GPIO.LOW)
+
+                log('valid', 'Successful entry by %s' % name)
+
+                # Try logging to SQL, but be careful not to fatal if the sql server goes down.
+                try:
+                    entry = Entry()
+                    entry.name = name
+                    entry.occurred_at = datetime.now()
+                    store.add(entry)
+                    store.flush()
+                except Exception as e:
+                    log('fatal', 'A fatal has occurred while logging to SQL: %s' % e)
+
                 return name
             else:
                 log('unauthorized', 'Unauthorized entry by %s' % name)

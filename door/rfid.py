@@ -5,11 +5,15 @@
 # Authors:
 # - Ricky Elrod <ricky@elrod.me>
 
+import sys
 import time
 import RPi.GPIO as GPIO
 from datetime import datetime
 from time import gmtime, strftime
 from storm.locals import *
+from all_cards import *
+
+sys.path.insert(0, '/etc/door')
 from all_cards import *
 
 class Entry(object):

@@ -6,6 +6,7 @@
 # - Ricky Elrod <ricky@elrod.me>
 
 import sys
+import syslog
 import time
 import RPi.GPIO as GPIO
 from datetime import datetime
@@ -48,10 +49,11 @@ GPIO.add_event_detect(input_zeros, GPIO.FALLING, callback=callback_zeros)
 GPIO.add_event_detect(input_ones, GPIO.FALLING, callback=callback_ones)
 
 def log(severity, message):
-    print '[%s] [%s] %s' % (
-        strftime("%Y-%m-%d %H:%M:%S", gmtime()),
-        severity.upper(),
-        message)
+    syslog.syslog(
+        '[%s] [%s] %s' % (
+            strftime("%Y-%m-%d %H:%M:%S", gmtime()),
+            severity.upper(),
+            message))
 
 def check(current_read, club_member_cards):
     '''

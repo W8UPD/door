@@ -19,7 +19,6 @@ from all_cards import *
 class Entry(object):
     __storm_table__ = 'entries'
     id = Int(primary=True)
-    occurred_at = DateTime()
     name = Unicode()
 
 database = create_database(sql_server)
@@ -81,7 +80,6 @@ def check(current_read, club_member_cards):
                 try:
                     entry = Entry()
                     entry.name = name
-                    entry.occurred_at = datetime.now()
                     store.add(entry)
                     store.flush()
                 except Exception as e:

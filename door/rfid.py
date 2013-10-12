@@ -11,18 +11,10 @@ import time
 import RPi.GPIO as GPIO
 from datetime import datetime
 from time import gmtime, strftime
-from storm.locals import *
+import requests
 
 sys.path.insert(0, '/etc/door')
 from all_cards import *
-
-class Entry(object):
-    __storm_table__ = 'entries'
-    id = Int(primary=True)
-    name = Unicode()
-
-database = create_database(sql_server)
-store = Store(database)
 
 current_read = []
 
@@ -78,12 +70,14 @@ def check(current_read, club_member_cards):
 
                 # Try logging to SQL, but be careful not to fatal if the sql server goes down.
                 try:
-                    entry = Entry()
-                    entry.name = name
-                    store.add(entry)
-                    store.flush()
+                    r = requests.get(
+                        log_cgi,
+                        params={
+                            'password': log_cgi_password,
+                            'name': name
+                        })
                 except Exception as e:
-                    log('fatal', 'A fatal has occurred while logging to SQL: %s' % e)
+                    log('fatal', 'A fatal has occurred while logging: %s' % e)
 
                 return name
             else:

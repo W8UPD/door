@@ -5,4 +5,5 @@ all_cards = {
     }
 }
 
-sql_server = 'mysql://foo:bar@baz.com/the_db'
+log_cgi = 'https://yourserver.com/foo/bar/baz/doorlog.cgi'
+log_cgi_password = 'changeme'

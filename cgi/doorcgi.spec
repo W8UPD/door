@@ -14,6 +14,9 @@ BuildRequires:  ghc-cgi-devel
 BuildRequires:  ghc-convertible-devel
 BuildRequires:  ghc-HDBC-devel
 BuildRequires:  ghc-HDBC-mysql-devel
+BuildRequires:  ghc-configurator-devel
+BuildRequires:  ghc-unix-compat-devel
+BuildRequires:  mysql-devel
 
 %description
 This is the CGI for handling logging from the RFID reader Python code.

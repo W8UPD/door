@@ -72,6 +72,7 @@ def check(current_read, club_member_cards):
                 try:
                     r = requests.get(
                         log_cgi,
+                        verify=False,
                         params={
                             'password': log_cgi_password,
                             'name': name

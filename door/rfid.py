@@ -12,6 +12,7 @@ import RPi.GPIO as GPIO
 from datetime import datetime
 from time import gmtime, strftime
 import requests
+import threading
 
 sys.path.insert(0, '/etc/door')
 from all_cards import *
@@ -46,6 +47,19 @@ def log(severity, message):
             severity.upper(),
             message))
 
+def log_upstream(name):
+    # Try logging to SQL, but be careful not to fatal if the sql server goes down.
+    try:
+        r = requests.get(
+                log_cgi,
+                verify=False,
+                params={
+                    'password': log_cgi_password,
+                    'name': name
+                })
+    except Exception as e:
+        log('fatal', 'A fatal has occurred while logging: %s' % e)
+
 def check(current_read, club_member_cards):
     '''
     Checks if a given current read is a valid card.
@@ -67,19 +81,7 @@ def check(current_read, club_member_cards):
                 GPIO.output(output, GPIO.LOW)
 
                 log('valid', 'Successful entry by %s' % name)
-
-                # Try logging to SQL, but be careful not to fatal if the sql server goes down.
-                try:
-                    r = requests.get(
-                        log_cgi,
-                        verify=False,
-                        params={
-                            'password': log_cgi_password,
-                            'name': name
-                        })
-                except Exception as e:
-                    log('fatal', 'A fatal has occurred while logging: %s' % e)
-
+                threading.Thread(target=log_upstream, args=[name]).start()
                 return name
             else:
                 log('unauthorized', 'Unauthorized entry by %s' % name)

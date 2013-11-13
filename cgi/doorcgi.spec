@@ -1,4 +1,4 @@
-%define gitdate    20131012
+%define gitdate    20131113
 Name:           doorcgi
 Version:        0.0.1
 Release:        1.%{gitdate}git%{?dist}
@@ -39,5 +39,8 @@ install -D -m 0644 cgi/doorcgi.conf.example %{buildroot}/%{_sysconfdir}/doorcgi.
 /srv/www/door.w8upd.org/logrfid.cgi
 
 %changelog
+* Wed Nov 13 2013 Ricky Elrod <codeblock@fedoraproject.org> - 0.0.1-1.20131113git
+- Log entries via UDP.
+
 * Sat Oct 12 2013 Ricky Elrod <codeblock@fedoraproject.org> - 0.0.1-1.20131012git
 - Initial build.

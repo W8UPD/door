@@ -25,6 +25,7 @@ This is the CGI for handling logging from the RFID reader Python code.
 %setup -q -n door-master
 
 %build
+cd cgi
 ghc -threaded --make -o logrfid.cgi doorcgi.hs
 
 %check

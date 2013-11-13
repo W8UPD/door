@@ -23,7 +23,7 @@ reportToIrc _ Nothing _ = return ()
 reportToIrc (Just host) (Just port) name = withSocketsDo $ do
   s <- socket AF_INET Datagram defaultProtocol
   host' <- inet_addr host
-  sendTo s ("The shack door was unlocked by " ++ [chr 2] ++ name ++ [chr 2] ++ ".") (SockAddrInet (PortNum (fromInteger port)) host')
+  sendTo s ("The shack door was unlocked by " ++ [chr 2] ++ name ++ [chr 2] ++ ".") (SockAddrInet (fromIntegral port) host')
   return ()
 
 cgiMain :: CGI CGIResult

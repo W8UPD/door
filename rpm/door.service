@@ -1,0 +1,11 @@
+[Unit]
+Description=W8UPD RFID Door handler
+After=network.target
+
+[Service]
+User=root
+Group=root
+ExecStart=/usr/bin/rfid.py
+
+[Install]
+WantedBy=multi-user.target

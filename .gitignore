@@ -1,2 +1,7 @@
 build
 all_cards.py
+rpm/noarch
+rpm/door-master/
+rpm/door-master.tar.gz
+*.rpm
+*.src.rpm

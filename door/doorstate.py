@@ -68,7 +68,6 @@ def callback_alarm_triggered(a):
         return None
     last_alarm_triggered_callback = current
 
-    last_door_open_callback = current
     log('info', 'Alarm triggered')
     log_upstream('alarm_triggered')
 

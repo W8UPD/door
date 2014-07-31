@@ -1,7 +1,7 @@
 %define gitdate   20140731
 Name:           door
 Version:        1.1.0
-Release:        0.1.%{gitdate}git%{?dist}
+Release:        0.2.%{gitdate}git%{?dist}
 Summary:        RFID Reader Code
 
 Group:          Applications/System
@@ -17,7 +17,7 @@ Requires:       python-requests
 
 %package state
 Summary:        Door state monitoring
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       %{name} = %{version}-%{release}
 
 %description state
 Door state monitoring subpackage.
@@ -68,6 +68,9 @@ chmod +x %{buildroot}%{python_sitelib}/%{name}/doorstate.py
 
 %changelog
 * Thu Jul 31 2014 Ricky Elrod <codeblock@fedoraproject.org> - 1.1.0-0.2.20140731git
+- Remove isa requirement in subpackage.
+
+* Thu Jul 31 2014 Ricky Elrod <codeblock@fedoraproject.org> - 1.1.0-0.1.20140731git
 - Include doorstate stuff.
 - Latest upstream master.
 

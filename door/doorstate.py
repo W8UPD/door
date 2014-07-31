@@ -62,3 +62,4 @@ GPIO.add_event_detect(alarm_triggered, GPIO.FALLING, callback=callback_alarm_sil
 
 while True:
     # Wait for callbacks
+    True

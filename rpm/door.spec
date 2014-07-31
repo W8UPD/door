@@ -46,6 +46,9 @@ mkdir %{buildroot}/%{_bindir}
 ln -s %{python_sitelib}/%{name}/rfid.py %{buildroot}/%{_bindir}/rfid.py
 chmod +x %{buildroot}%{python_sitelib}/%{name}/rfid.py
 
+ln -s %{python_sitelib}/%{name}/doorstate.py %{buildroot}/%{_bindir}/doorstate.py
+chmod +x %{buildroot}%{python_sitelib}/%{name}/doorstate.py
+
 %post
 /bin/systemctl daemon-reload
 
@@ -54,9 +57,13 @@ chmod +x %{buildroot}%{python_sitelib}/%{name}/rfid.py
 %config(noreplace) %{_sysconfdir}/%{name}/config.py
 %{_sysconfdir}/%{name}/config.pyc
 %{_sysconfdir}/%{name}/config.pyo
-%{_sysconfdir}/rsyslog.d/*.conf
-/lib/systemd/system/*.service
+%{_sysconfdir}/rsyslog.d/50-door.conf
+/lib/systemd/system/door.service
 %{_bindir}/rfid.py
+
+%files state
+%{_sysconfdir}/rsyslog.d/51-doorstate.conf
+/lib/systemd/system/doorstate.service
 %{_bindir}/doorstate.py
 
 %changelog

@@ -21,7 +21,7 @@ GPIO.setmode(GPIO.BOARD)
 
 door_open = 26
 alarm_triggered = 7
-GPIO.setup(door_open, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
+GPIO.setup(door_open, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 GPIO.setup(alarm_triggered, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
 def log(severity, message):
@@ -43,23 +43,38 @@ def log_upstream(event):
     except Exception as e:
         log('fatal', 'A fatal has occurred while logging: %s' % e)
 
+last_door_open_callback = None
+
 def callback_door_open(a):
-    log_upstream('door_opened')
+    global last_door_open_callback
+    current = GPIO.input(a)
+    if current == last_door_open_callback:
+        return None
+    last_door_open_callback = current
+
+    if current:
+        log('info', 'Door opened')
+        log_upstream('door_opened')
+    else:
+        log('info', 'Door closed')
+        log_upstream('door_closed')
+
+last_alarm_triggered_callback = 0
 
 def callback_alarm_triggered(a):
+    global last_alarm_triggered_callback
+    current = time.time()
+    if current <= last_alarm_triggered_callback + 10:
+        return None
+    last_alarm_triggered_callback = current
+
+    last_door_open_callback = current
+    log('info', 'Alarm triggered')
     log_upstream('alarm_triggered')
 
-def callback_door_closed(a):
-    log_upstream('door_closed')
-
-def callback_alarm_silenced(a):
-    log_upstream('alarm_silenced')
-
-GPIO.add_event_detect(door_open, GPIO.RISING, callback=callback_door_open)
-GPIO.add_event_detect(alarm_triggered, GPIO.RISING, callback=callback_alarm_triggered)
-GPIO.add_event_detect(door_open, GPIO.FALLING, callback=callback_door_closed)
-GPIO.add_event_detect(alarm_triggered, GPIO.FALLING, callback=callback_alarm_silenced)
+GPIO.add_event_detect(door_open, GPIO.BOTH, callback=callback_door_open)
+GPIO.add_event_detect(alarm_triggered, GPIO.RISING, callback=callback_alarm_triggered, bouncetime=250)
 
 while True:
     # Wait for callbacks
-    True
+    time.sleep(0.5)

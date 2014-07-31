@@ -1,7 +1,7 @@
 %define gitdate   20140731
 Name:           door
-Version:        1.1.0
-Release:        0.2.%{gitdate}git%{?dist}
+Version:        1.1.1
+Release:        0.1.%{gitdate}git%{?dist}
 Summary:        RFID Reader Code
 
 Group:          Applications/System
@@ -67,6 +67,9 @@ chmod +x %{buildroot}%{python_sitelib}/%{name}/doorstate.py
 %{_bindir}/doorstate.py
 
 %changelog
+* Thu Jul 31 2014 Ricky Elrod <codeblock@fedoraproject.org> - 1.1.1-0.1.20140731git
+- Debouncing is annoying.
+
 * Thu Jul 31 2014 Ricky Elrod <codeblock@fedoraproject.org> - 1.1.0-0.2.20140731git
 - Remove isa requirement in subpackage.
 

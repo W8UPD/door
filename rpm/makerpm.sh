@@ -22,7 +22,7 @@ if [ "$1" == "fetch" ]; then
   fi
 fi
 
-rpmbuild --define "_sourcedir ." --define "_rpmdir ." --define "_builddir `pwd`" --define "_srcrpmdir ." --define "_speccdir ." -ba "$cwd"/door.spec
+rpmbuild --define "_sourcedir $cwd" --define "_rpmdir $cwd" --define "_builddir $cwd" --define "_srcrpmdir $cwd" --define "_speccdir $cwd" -ba "$cwd"/door.spec
 
 if [ $? == 0 ]; then
   echo "***"

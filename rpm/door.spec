@@ -40,7 +40,7 @@ install -p -D -m 644 rpm/%{name}.service %{buildroot}/lib/systemd/system/%{name}
 install -p -D -m 644 rpm/50-%{name}.conf %{buildroot}/etc/rsyslog.d/50-%{name}.conf
 
 install -p -D -m 644 rpm/%{name}state.service %{buildroot}/lib/systemd/system/%{name}state.service
-install -p -D -m 644 rpm/50-%{name}state.conf %{buildroot}/etc/rsyslog.d/50-%{name}state.conf
+install -p -D -m 644 rpm/51-%{name}state.conf %{buildroot}/etc/rsyslog.d/51-%{name}state.conf
 
 mkdir %{buildroot}/%{_bindir}
 ln -s %{python_sitelib}/%{name}/rfid.py %{buildroot}/%{_bindir}/rfid.py
@@ -54,7 +54,7 @@ chmod +x %{buildroot}%{python_sitelib}/%{name}/rfid.py
 %config(noreplace) %{_sysconfdir}/%{name}/config.py
 %{_sysconfdir}/%{name}/config.pyc
 %{_sysconfdir}/%{name}/config.pyo
-%{_sysconfdir}/rsyslog.d/50-%{name}*.conf
+%{_sysconfdir}/rsyslog.d/*.conf
 /lib/systemd/system/*.service
 %{_bindir}/rfid.py
 %{_bindir}/doorstate.py

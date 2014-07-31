@@ -1,7 +1,7 @@
-%define gitdate   20131111
+%define gitdate   20140731
 Name:           door
-Version:        1.0.0
-Release:        0.2.%{gitdate}git%{?dist}
+Version:        1.1.0
+Release:        0.1.%{gitdate}git%{?dist}
 Summary:        RFID Reader Code
 
 Group:          Applications/System
@@ -14,6 +14,13 @@ BuildArch:      noarch
 Requires:       python
 Requires:       python-requests
 #Requires:       python-RPi-GPIO >= 0.5.2
+
+%package state
+Summary:        Door state monitoring
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description state
+Door state monitoring subpackage.
 
 %description
 RFID GPIO Code.
@@ -32,6 +39,9 @@ echo "# Your configuration goes here." > %{buildroot}%{_sysconfdir}/%{name}/conf
 install -p -D -m 644 rpm/%{name}.service %{buildroot}/lib/systemd/system/%{name}.service
 install -p -D -m 644 rpm/50-%{name}.conf %{buildroot}/etc/rsyslog.d/50-%{name}.conf
 
+install -p -D -m 644 rpm/%{name}state.service %{buildroot}/lib/systemd/system/%{name}state.service
+install -p -D -m 644 rpm/50-%{name}state.conf %{buildroot}/etc/rsyslog.d/50-%{name}state.conf
+
 mkdir %{buildroot}/%{_bindir}
 ln -s %{python_sitelib}/%{name}/rfid.py %{buildroot}/%{_bindir}/rfid.py
 chmod +x %{buildroot}%{python_sitelib}/%{name}/rfid.py
@@ -44,11 +54,16 @@ chmod +x %{buildroot}%{python_sitelib}/%{name}/rfid.py
 %config(noreplace) %{_sysconfdir}/%{name}/config.py
 %{_sysconfdir}/%{name}/config.pyc
 %{_sysconfdir}/%{name}/config.pyo
-%{_sysconfdir}/rsyslog.d/50-%{name}.conf
+%{_sysconfdir}/rsyslog.d/50-%{name}*.conf
 /lib/systemd/system/*.service
 %{_bindir}/rfid.py
+%{_bindir}/doorstate.py
 
 %changelog
+* Thu Jul 31 2014 Ricky Elrod <codeblock@fedoraproject.org> - 1.1.0-0.2.20140731git
+- Include doorstate stuff.
+- Latest upstream master.
+
 * Mon Nov 11 2013 Ricky Elrod <codeblock@fedoraproject.org> - 1.0.0-0.2.20131111git
 - Latest upstream master.
 

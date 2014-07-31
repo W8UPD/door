@@ -55,7 +55,8 @@ def log_upstream(name):
                 verify=False,
                 params={
                     'password': log_cgi_password,
-                    'name': name
+                    'name': name,
+                    'event': 'auth_success'
                 })
     except Exception as e:
         log('fatal', 'A fatal has occurred while logging: %s' % e)

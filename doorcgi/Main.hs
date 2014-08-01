@@ -93,14 +93,14 @@ main = do
           S.text "Success"
         "door_opened" -> do
           _ <- liftIO $ runDb dbConfig $ insert (DoorStates now "opened")
-          irc $ "The shack door was " <> [chr 3] <> "7opened " <> [chr 3] <> "."
+          irc $ "The shack door was " <> [chr 3] <> "7opened" <> [chr 3] <> "."
           S.text "Success"
         "door_closed" -> do
           _ <- liftIO $ runDb dbConfig $ insert (DoorStates now "closed")
-          irc $ "The shack door was " <> [chr 3] <> "5closed " <> [chr 3] <> "."
+          irc $ "The shack door was " <> [chr 3] <> "5closed" <> [chr 3] <> "."
           S.text "Success"
         "alarm_triggered" -> do
           _ <- liftIO $ runDb dbConfig $ insert (DoorStates now "closed")
-          irc $ "The shack door alarm was " <> [chr 3] <> "4triggered " <> [chr 3] <> "."
+          irc $ "The shack door alarm was " <> [chr 3] <> "4triggered" <> [chr 3] <> "."
           S.text "Success"
         _ -> S.text "Unknown event."

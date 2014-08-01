@@ -37,7 +37,9 @@ mkdir -p %{buildroot}/%{_bindir}
 cd doorcgi
 cp ~/.cabal/bin/%{name} %{buildroot}/%{_bindir}/%{name}
 install -D -m 0644 %{name}.conf.example %{buildroot}/%{_sysconfdir}/%{name}.conf
-install -D -m 0644 ../rpm/%{name}.conf %{buildroot}/%{_sysconfdir}/init/%{name}.conf
+
+cd ../rpm
+install -D -m 0644 %{name}.conf %{buildroot}/%{_sysconfdir}/init/%{name}.conf
 
 %files
 %config(noreplace) %{_sysconfdir}/%{name}.conf

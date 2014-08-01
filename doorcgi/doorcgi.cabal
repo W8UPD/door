@@ -1,0 +1,31 @@
+name:                doorcgi
+version:             0.1.0.0
+synopsis:            Web UI for our RFID door logging
+-- description:
+homepage:            https://github.com/w8upd/door
+license:             GPL-2
+license-file:        LICENSE
+author:              Ricky Elrod
+maintainer:          ricky@elrod.me
+-- copyright:
+category:            Web
+build-type:          Simple
+-- extra-source-files:
+cabal-version:       >=1.10
+
+executable doorcgi
+  main-is:             Main.hs
+  -- other-modules:
+  -- other-extensions:
+  build-depends:       base >= 4 && < 5
+                     , configurator >= 0.3 && < 0.4
+                     , persistent >= 1.3 && < 2
+                     , persistent-mysql >= 1.3 && < 2
+                     , persistent-template >= 1.3 && < 2
+                     , resourcet >= 1.1 && < 2
+                     , scotty >= 0.8 && < 1
+                     , text >= 1 && < 2
+                     , time >= 1.4 && < 2
+                     , transformers
+  -- hs-source-dirs:
+  default-language:    Haskell2010

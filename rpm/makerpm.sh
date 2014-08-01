@@ -24,9 +24,11 @@ fi
 
 rpmbuild --define "_sourcedir $cwd" --define "_rpmdir $cwd" --define "_builddir $cwd" --define "_srcrpmdir $cwd" --define "_speccdir $cwd" -ba "$cwd"/door.spec
 
+rpmbuild --define "_sourcedir $cwd" --define "_rpmdir $cwd" --define "_builddir $cwd" --define "_srcrpmdir $cwd" --define "_speccdir $cwd" -ba "$cwd"/doorcgi.spec
+
 if [ $? == 0 ]; then
   echo "***"
-  echo "Done. The output should be somewhere in $cwd/noarch"
+  echo "Done. The output should be somewhere in $cwd"
   echo "***"
 else
   echo "***"

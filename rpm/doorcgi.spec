@@ -1,6 +1,6 @@
-%define gitdate    20131113
+%define gitdate    20140801
 Name:           doorcgi
-Version:        0.0.1
+Version:        1.0.0
 Release:        1.%{gitdate}git%{?dist}
 Summary:        The server side of the W8UPD RFID log system
 
@@ -10,36 +10,37 @@ URL:            https://github.com/w8upd/door/
 # Source0 retrieved by pulling a Github tarball.
 # See: https://github.com/w8upd/door/downloads
 Source0:        master.tar.gz
-BuildRequires:  ghc-cgi-devel
-BuildRequires:  ghc-convertible-devel
-BuildRequires:  ghc-HDBC-devel
-BuildRequires:  ghc-HDBC-mysql-devel
-BuildRequires:  ghc-configurator-devel
-BuildRequires:  ghc-unix-compat-devel
+BuildRequires:  ghc-cabal-install
 BuildRequires:  mysql-devel
 
 %description
-This is the CGI for handling logging from the RFID reader Python code.
+This is the web UI for handling logging from the RFID reader Python code.
 
 %prep
 %setup -q -n door-master
 
 %build
-cd cgi
-ghc -threaded --make -o logrfid.cgi doorcgi.hs
+cd doorcgi
+cabal sandbox init
+cabal build
+cabal install
 
 %check
 
 %install
-mkdir -p %{buildroot}/srv/www/door.w8upd.org/
-install -D -m 0755 cgi/logrfid.cgi %{buildroot}/srv/www/door.w8upd.org/logrfid.cgi
-install -D -m 0644 cgi/doorcgi.conf.example %{buildroot}/%{_sysconfdir}/doorcgi.conf
+mkdir -p %{buildroot}/%{_bindir}
+cd doorcgi
+cp .cabal-sandbox/bin/%{name} %{buildroot}/%{_bindir}/%{name}
+install -D -m 0644 %{name}.conf.example %{buildroot}/%{_sysconfdir}/%{name}.conf
 
 %files
 %config(noreplace) %{_sysconfdir}/doorcgi.conf
-/srv/www/door.w8upd.org/logrfid.cgi
+%{_bindir}/%{name}
 
 %changelog
+* Fri Aug 1 2014 Ricky Elrod <codeblock@fedoraproject.org> - 1.0.0-1.20140801git
+- Rewrite in Scotty.
+
 * Wed Nov 13 2013 Ricky Elrod <codeblock@fedoraproject.org> - 0.0.1-1.20131113git
 - Log entries via UDP.
 

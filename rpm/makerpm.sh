@@ -23,12 +23,18 @@ if [ "$1" == "fetch" ]; then
 fi
 
 rpmbuild --define "_sourcedir $cwd" --define "_rpmdir $cwd" --define "_builddir $cwd" --define "_srcrpmdir $cwd" --define "_speccdir $cwd" -ba "$cwd"/door.spec
-
-rpmbuild --define "_sourcedir $cwd" --define "_rpmdir $cwd" --define "_builddir $cwd" --define "_srcrpmdir $cwd" --define "_speccdir $cwd" -ba "$cwd"/doorcgi.spec
+rpmbuild --define "_sourcedir $cwd" --define "_rpmdir $cwd" --define "_builddir $cwd" --define "_srcrpmdir $cwd" --define "_speccdir $cwd" -bs "$cwd"/doorcgi.spec
 
 if [ $? == 0 ]; then
   echo "***"
   echo "Done. The output should be somewhere in $cwd"
+  echo
+  echo "NOTE: doorcgi only produces a .src.rpm. You should use mock or copr"
+  echo "      for RHEL6 for building a binary of it that works in production."
+  echo
+  echo "A copr command might look like this (you must upload the SRPM from"
+  echo "above somewhere):"
+  echo "   copr-cli build --nowait -r epel-6-x86_64 w8upd-doorcgi <URL OF UPLOADED SRPM>"
   echo "***"
 else
   echo "***"

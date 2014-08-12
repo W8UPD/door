@@ -23,13 +23,11 @@ import Network.HTTP.Types.Status
 import Network.Socket
 import qualified Web.Scotty as S
 
--- | id          | int(11)      | NO   | PRI | NULL              | auto_increment |
--- | occurred_at | timestamp    | NO   |     | CURRENT_TIMESTAMP |                |
--- | name        | varchar(255) | YES  |     | NULL              |                |
 share [mkPersist sqlSettings, mkMigrate "migrateAll"] [persistLowerCase|
 Entries
   occurredAt UTCTime
   name Text
+  hidden Bool
   deriving Show
 DoorStates
   occurredAt UTCTime
@@ -88,7 +86,7 @@ main = do
       case event :: Text of
         "auth_success" -> do
           name <- S.param "name"
-          _ <- liftIO $ runDb dbConfig $ insert (Entries now name)
+          _ <- liftIO $ runDb dbConfig $ insert (Entries now name False)
           irc $ "The shack door was " <> [chr 3] <> "3unlocked " <> [chr 3] <> "by " <> [chr 2] <> unpack name <> [chr 2] <> "."
           S.text "Success"
         "door_opened" -> do

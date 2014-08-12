@@ -1,7 +1,8 @@
 %define gitdate    20140801
 Name:           doorcgi
-Version:        1.0.0
-Release:        2.%{gitdate}git%{?dist}
+Version:        0.1.1.0
+Release:        1.%{gitdate}git%{?dist}
+Epoch:          1
 Summary:        The server side of the W8UPD RFID log system
 
 Group:          Applications/Internet
@@ -47,6 +48,10 @@ install -D -m 0644 %{name}.conf %{buildroot}/%{_sysconfdir}/init/%{name}.conf
 %{_bindir}/%{name}
 
 %changelog
+* Tue Aug 12 2014 Ricky Elrod <codeblock@fedoraproject.org> - 0.1.1.0-1.20140812git
+- Align version numbers to source (and add epoch).
+- Latest source.
+
 * Fri Aug 1 2014 Ricky Elrod <codeblock@fedoraproject.org> - 1.0.0-2.20140801git
 - Use upstart
 

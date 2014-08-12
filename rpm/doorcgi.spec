@@ -1,4 +1,4 @@
-%define gitdate    20140801
+%define gitdate    20140812
 Name:           doorcgi
 Version:        0.1.1.0
 Release:        1.%{gitdate}git%{?dist}
